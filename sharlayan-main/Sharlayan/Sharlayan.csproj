@@ -1,0 +1,130 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net462;net48;net5.0</TargetFrameworks>
+		<IncludeSymbols>true</IncludeSymbols>
+		<IncludeSource>true</IncludeSource>
+		<Authors>Ryan Wilson</Authors>
+		<PackageLicenseUrl></PackageLicenseUrl>
+		<PackageProjectUrl>https://github.com/FFXIVAPP/sharlayan</PackageProjectUrl>
+		<PackageIconUrl></PackageIconUrl>
+		<RepositoryUrl></RepositoryUrl>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<PackageTags>ffxiv memory tracking</PackageTags>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Version>7.0.1</Version>
+		<Company>SyndicatedLife</Company>
+		<Product>Sharlayan</Product>
+		<Description>Final Fantasy XIV Memory Reading</Description>
+		<Copyright>Copyright © 2007 - 2021 Ryan Wilson</Copyright>
+		<FileVersion>7.0.0.0</FileVersion>
+		<AssemblyVersion>7.0.0.0</AssemblyVersion>
+		<AssemblyName>Sharlayan</AssemblyName>
+		<RootNamespace>Sharlayan</RootNamespace>
+		<PackageId>Sharlayan</PackageId>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryType></RepositoryType>
+		<PackageIcon>Logo.png</PackageIcon>
+		<LangVersion>8.0</LangVersion>
+		<Platforms>AnyCPU;x64</Platforms>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="NLog" Version="4.7.0" />
+		<PackageReference Include="NLog.Config" Version="4.7.0" />
+		<PackageReference Include="NLog.Schema" Version="4.7.0" />
+		<PackageReference Include="System.Buffers" Version="4.5.1" />
+		<PackageReference Include="System.Net.Http" Version="4.3.4" />
+		<PackageReference Include="System.ValueTuple" Version="4.5.0" />
+	</ItemGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<OutputPath>.\bin\Release</OutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+	  <OutputPath>.\bin\Release</OutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<OutputPath>.\bin\Debug</OutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+	  <OutputPath>.\bin\Debug</OutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0|AnyCPU'">
+		<DocumentationFile>.\bin\Release\net5.0\Sharlayan.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0|x64'">
+	  <DocumentationFile>.\bin\Release\net5.0\Sharlayan.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0|AnyCPU'">
+		<DocumentationFile>.\bin\Debug\net5.0\Sharlayan.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0|x64'">
+	  <DocumentationFile>.\bin\Debug\net5.0\Sharlayan.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
+		<DocumentationFile>.\bin\Release\net462\Sharlayan.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|x64'">
+	  <DocumentationFile>.\bin\Release\net462\Sharlayan.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net462|AnyCPU'">
+		<DocumentationFile>.\bin\Debug\net462\Sharlayan.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net462|x64'">
+	  <DocumentationFile>.\bin\Debug\net462\Sharlayan.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|AnyCPU'">
+		<DocumentationFile>.\bin\Release\net48\Sharlayan.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|x64'">
+	  <DocumentationFile>.\bin\Release\net48\Sharlayan.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
+		<DocumentationFile>.\bin\Debug\net48\Sharlayan.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|x64'">
+	  <DocumentationFile>.\bin\Debug\net48\Sharlayan.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)'=='net462'">
+		<Reference Include="System.Web" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)'=='net48'">
+		<Reference Include="System.Web" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="Logo.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+
+	<Target Name="CopyPackages" AfterTargets="Pack">
+		<ItemGroup>
+			<PACKAGES Include="$(OutputPath)*.nupkg" />
+		</ItemGroup>
+		<Copy SourceFiles="@(PACKAGES)" DestinationFolder="$(SolutionDir)published\" />
+	</Target>
+
+	<Target Name="PostBuild" AfterTargets="CopyPackages">
+		<Exec Command="%25SYSTEMROOT%25\System32\WindowsPowerShell\v1.0\powershell.exe –NonInteractive –ExecutionPolicy Unrestricted –command &quot;&amp; { &amp;'$(SolutionDir)RenameSymbolsToPackage.ps1' '$(TargetName)' }&quot;" />
+	</Target>
+</Project>

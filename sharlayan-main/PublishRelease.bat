@@ -1,1 +1,0 @@
-dotnet publish -p:PublishProfile=FolderProfile -p:PublishSingleFile=true -c Release

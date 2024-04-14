@@ -189,7 +189,7 @@ namespace SharlayanReader
                 if (cutsceneText.Length > 0 && cutsceneText != lastCutsceneText)
                 {
                     lastCutsceneText = cutsceneText;
-                    SystemFunctions.WriteData("CUTSCENE", "003D", "", cutsceneText, 1000);
+                    SystemFunctions.WriteData("CUTSCENE", "003D", "", cutsceneText, 100);
                 }
             }
             catch (Exception)

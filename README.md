@@ -5,7 +5,7 @@ FFXIV字幕擷取程式
 ## Intro
 
 -   本程式已內建在[Tataru Helper Node](https://home.gamer.com.tw/artwork.php?sn=5323128)，請直接安裝Tataru Helper Node即可
--   本程式需安裝[Microsoft .NET Framework 4.6.2](https://go.microsoft.com/fwlink/?linkid=780596)或以上版本
+-   本程式需安裝[Microsoft .NET Framework 4.7.2](https://go.microsoft.com/fwlink/?LinkId=863262)或以上版本
 
 ## 注意事項
 

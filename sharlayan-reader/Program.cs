@@ -270,7 +270,7 @@ namespace SharlayanReader
                     temp = temp.Replace(dialogText[j].ToString(), string.Empty);
                 }
 
-                InvaildString.Replace(temp, string.Empty);
+                temp = InvaildString.Replace(temp, string.Empty);
 
                 if (InvalidSentence.IsMatch(temp.Trim()))
                 {

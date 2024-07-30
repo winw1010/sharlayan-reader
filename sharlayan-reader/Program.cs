@@ -268,8 +268,9 @@ namespace SharlayanReader
                 for (int j = 0; j < dialogText.Length; j++)
                 {
                     temp = temp.Replace(dialogText[j].ToString(), string.Empty);
-                    InvaildString.Replace(temp, string.Empty);
                 }
+
+                InvaildString.Replace(temp, string.Empty);
 
                 if (InvalidSentence.IsMatch(temp.Trim()))
                 {

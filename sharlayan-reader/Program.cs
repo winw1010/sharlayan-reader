@@ -123,7 +123,7 @@ namespace SharlayanReader
                 string dialogName = StringFunctions.GetMemoryString(memoryHandler, "PANEL_NAME", 128);
                 string dialogText = StringFunctions.GetMemoryString(memoryHandler, "PANEL_TEXT", 512);
 
-                if (dialogName.Length > 0 && dialogText.Length > 0 && dialogText != DialogTextList.Last())
+                if (/*dialogName.Length > 0 &&*/ dialogText.Length > 0 && dialogText != DialogTextList.Last())
                 {
                     DialogTextList.Add(dialogText);
                     if (DialogTextList.Count > 20)

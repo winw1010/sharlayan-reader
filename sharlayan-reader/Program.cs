@@ -240,8 +240,8 @@ namespace SharlayanReader
             {
                 type,
                 code,
-                name = ChatCleaner.ProcessFullLine(name).Trim(),
-                text = ChatCleaner.ProcessFullLine(text).Trim(),
+                name,
+                text,
             });
 
             Console.Write(dataString + "\r\n");
@@ -300,7 +300,7 @@ namespace SharlayanReader
             {
                 byte[] byteArray = memoryHandler.GetByteArray(memoryHandler.Scanner.Locations[key], length);
                 byteArray = GetRealByteArray(byteArray);
-                byteString = GetByteString(byteArray);
+                byteString = ChatCleaner.ProcessFullLine(byteArray);
             }
             catch (Exception)
             {
@@ -320,11 +320,6 @@ namespace SharlayanReader
             }
 
             return byteList.ToArray();
-        }
-
-        public static string GetByteString(byte[] byteArray)
-        {
-            return Encoding.UTF8.GetString(byteArray);
         }
     }
 
@@ -352,9 +347,8 @@ namespace SharlayanReader
 
         private static readonly Regex SpecialReplacementRegex = new Regex(@"[\uFFFD]", RegexOptions.Compiled);
 
-        public static string ProcessFullLine(string text)
+        public static string ProcessFullLine(byte[] bytes)
         {
-            byte[] bytes = Encoding.UTF8.GetBytes(text);
             var line = Encoding.UTF8.GetString(bytes.ToArray()).Replace("  ", " ");
             try
             {

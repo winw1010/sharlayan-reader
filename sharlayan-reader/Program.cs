@@ -255,7 +255,7 @@ namespace SharlayanReader
 
     class ArrayFunctions
     {
-        private static readonly Regex VaildString = new Regex(@"[0-9a-z０-９ａ-ｚＡ-Ｚぁ-ゖァ-ヺ一-龯]", RegexOptions.Compiled);
+        private static readonly Regex InvalidSentence = new Regex(@"^[^.0-9a-zA-Z…０-９ａ-ｚＡ-Ｚぁ-ゖァ-ヺ一-龯]+$", RegexOptions.Compiled);
         private static readonly Regex InvaildString = new Regex(@"[\r\n]|（.*?）|\(.*?\)", RegexOptions.Compiled);
 
         public static bool IsNotRepeated(string text, List<string> dialogTextList)
@@ -271,7 +271,7 @@ namespace SharlayanReader
                     InvaildString.Replace(temp, string.Empty);
                 }
 
-                if (VaildString.IsMatch(temp.Trim()))
+                if (InvalidSentence.IsMatch(temp.Trim()))
                 {
                     return false;
                 }

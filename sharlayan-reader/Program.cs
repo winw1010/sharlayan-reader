@@ -22,8 +22,8 @@ namespace SharlayanReader
         static int _previousArrayIndex = 0;
         static int _previousOffset = 0;
 
-        static string lastDialogText = "";
-        static string lastChatLogText = "";
+        static List<string> DialogTextList = new List<string>() { "" };
+        static List<ChatLogItem> lastChatLogEntries = new List<ChatLogItem>();
         static string lastCutsceneText = "";
 
         static readonly List<string> systemCode = new List<string>() { "0039", "0839", "0003", "0038", "003C", "0048", "001D", "001C" };
@@ -123,9 +123,13 @@ namespace SharlayanReader
                 string dialogName = StringFunctions.GetMemoryString(memoryHandler, "PANEL_NAME", 128);
                 string dialogText = StringFunctions.GetMemoryString(memoryHandler, "PANEL_TEXT", 512);
 
-                if (dialogName.Length > 0 && dialogText.Length > 0 && dialogText != lastDialogText)
+                if (dialogName.Length > 0 && dialogText.Length > 0 && dialogText != DialogTextList.Last())
                 {
-                    lastDialogText = dialogText;
+                    DialogTextList.Add(dialogText);
+                    if (DialogTextList.Count > 20)
+                    {
+                        DialogTextList.RemoveRange(0, 10);
+                    }
                     SystemFunctions.WriteData("DIALOG", "003D", dialogName, dialogText);
                 }
             }
@@ -146,13 +150,19 @@ namespace SharlayanReader
 
                 if (chatLogEntries.Count > 0)
                 {
+                    if (ArrayFunctions.IsSameChatLogEntries(chatLogEntries, lastChatLogEntries))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        lastChatLogEntries = chatLogEntries;
+                    }
+
                     for (int i = 0; i < chatLogEntries.Count; i++)
                     {
                         ChatLogItem chatLogItem = chatLogEntries[i];
 
-                        if (chatLogItem.Message == lastChatLogText) { continue; }
-
-                        lastChatLogText = chatLogItem.Message;
                         string logName = StringFunctions.GetLogName(chatLogItem);
                         string logText = chatLogItem.Message;
 
@@ -166,7 +176,10 @@ namespace SharlayanReader
                             }
                         }
 
-                        SystemFunctions.WriteData("CHAT_LOG", chatLogItem.Code, logName, logText);
+                        if (ArrayFunctions.IsNotRepeated(logText, DialogTextList))
+                        {
+                            SystemFunctions.WriteData("CHAT_LOG", chatLogItem.Code, logName, logText);
+                        }
                     }
                 }
             }
@@ -189,7 +202,11 @@ namespace SharlayanReader
                 if (cutsceneText.Length > 0 && cutsceneText != lastCutsceneText)
                 {
                     lastCutsceneText = cutsceneText;
-                    SystemFunctions.WriteData("CUTSCENE", "003D", "", cutsceneText, 100);
+
+                    if (ArrayFunctions.IsNotRepeated(cutsceneText, DialogTextList))
+                    {
+                        SystemFunctions.WriteData("CUTSCENE", "003D", "", cutsceneText);
+                    }
                 }
             }
             catch (Exception)
@@ -233,6 +250,55 @@ namespace SharlayanReader
             });
 
             Console.Write(dataString + "\r\n");
+        }
+    }
+
+    class ArrayFunctions
+    {
+        private static readonly Regex VaildString = new Regex(@"[0-9a-z０-９ａ-ｚＡ-Ｚぁ-ゖァ-ヺ一-龯]", RegexOptions.Compiled);
+        private static readonly Regex InvaildString = new Regex(@"[\r\n]|（.*?）|\(.*?\)", RegexOptions.Compiled);
+
+        public static bool IsNotRepeated(string text, List<string> dialogTextList)
+        {
+            for (int i = 0; i < dialogTextList.Count; i++)
+            {
+                string temp = text;
+                string dialogText = dialogTextList[i];
+
+                for (int j = 0; j < dialogText.Length; j++)
+                {
+                    temp = temp.Replace(dialogText[j].ToString(), string.Empty);
+                    InvaildString.Replace(temp, string.Empty);
+                }
+
+                if (VaildString.IsMatch(temp.Trim()))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool IsSameChatLogEntries(List<ChatLogItem> chatLogEntries, List<ChatLogItem> lastChatLogEntries)
+        {
+            if (chatLogEntries.Count != lastChatLogEntries.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < chatLogEntries.Count; i++)
+            {
+                ChatLogItem chatLogItem = chatLogEntries[i];
+                ChatLogItem lastChatLogItem = lastChatLogEntries[i];
+
+                if (chatLogItem.Message != lastChatLogItem.Message)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 
@@ -307,7 +373,9 @@ namespace SharlayanReader
         private static readonly Regex HQRegex = new Regex(@"\uE03C", RegexOptions.Compiled);
 
         //private static readonly Regex NewLineRegex = new Regex(@"[\r\n]+", RegexOptions.Compiled);
+        private static readonly Regex NewLineRegex = new Regex(@"[\n]+", RegexOptions.Compiled);
 
+        //private static readonly Regex NoPrintingCharactersRegex = new Regex(@"[\x00-\x1F\x7F]+", RegexOptions.Compiled);
         private static readonly Regex NoPrintingCharactersRegex = new Regex(@"[\x00-\x0C\x0E-\x1F\x7F]+", RegexOptions.Compiled);
 
         private static readonly Regex SpecialPurposeUnicodeRegex = new Regex(@"[\uE000-\uF8FF]", RegexOptions.Compiled);
@@ -416,7 +484,7 @@ namespace SharlayanReader
                 // cleanup special replacement character bytes: 239 191 189
                 cleaned = SpecialReplacementRegex.Replace(cleaned, string.Empty);
                 // remove new lines
-                //cleaned = NewLineRegex.Replace(cleaned, string.Empty);
+                cleaned = NewLineRegex.Replace(cleaned, string.Empty);
                 // remove characters 0-31
                 cleaned = NoPrintingCharactersRegex.Replace(cleaned, string.Empty);
 

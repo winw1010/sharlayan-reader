@@ -437,6 +437,11 @@ namespace SharlayanReader
 
                 var cleaned = Encoding.UTF8.GetString(newList.ToArray()).Replace("  ", " ");
 
+                if (cleaned.Contains("�"))
+                {
+                    return "";
+                }
+
                 newList.Clear();
 
                 // replace right arrow in chat (parsing)

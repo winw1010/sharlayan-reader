@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2B55F2D9-0920-4B07-8B6A-3296B3262ECB}</ProjectGuid>
+    <ProjectGuid>{519C8EE3-2793-4761-89A3-0CC8102365C8}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>sharlayan_reader</RootNamespace>
     <AssemblyName>sharlayan-reader</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -54,7 +54,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -75,7 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sharlayan\Sharlayan.csproj">
-      <Project>{0d80f0f8-d004-4b4d-a3f6-eeb02975f906}</Project>
+      <Project>{774f6b8f-e46a-4a2a-a080-4b1831269037}</Project>
       <Name>Sharlayan</Name>
     </ProjectReference>
   </ItemGroup>

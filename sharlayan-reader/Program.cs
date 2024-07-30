@@ -245,8 +245,8 @@ namespace SharlayanReader
             {
                 type,
                 code,
-                name = ChatCleaner.ProcessFullLine(name),
-                text = ChatCleaner.ProcessFullLine(text),
+                name = ChatCleaner.ProcessFullLine(name).Trim(),
+                text = ChatCleaner.ProcessFullLine(text).Trim(),
             });
 
             Console.Write(dataString + "\r\n");

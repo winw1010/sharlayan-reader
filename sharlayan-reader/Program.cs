@@ -22,7 +22,7 @@ namespace SharlayanReader
         static int _previousArrayIndex = 0;
         static int _previousOffset = 0;
 
-        static List<string> DialogTextList = new List<string>() { "" };
+        static string lastDialogText = "";
         static List<ChatLogItem> lastChatLogEntries = new List<ChatLogItem>();
         static string lastCutsceneText = "";
 
@@ -123,7 +123,7 @@ namespace SharlayanReader
                 string dialogName = StringFunctions.GetMemoryString(memoryHandler, "PANEL_NAME", 128);
                 string dialogText = StringFunctions.GetMemoryString(memoryHandler, "PANEL_TEXT", 512);
 
-                if (dialogText.Length > 0 && dialogText != DialogTextList.Last())
+                if (dialogText.Length > 0 && dialogText != lastDialogText)
                 {
                     if (dialogName.Length == 0)
                     {
@@ -131,13 +131,7 @@ namespace SharlayanReader
                         dialogName = StringFunctions.GetMemoryString(memoryHandler, "PANEL_NAME", 128);
                     }
 
-                    DialogTextList.Add(dialogText);
-
-                    if (DialogTextList.Count > 20)
-                    {
-                        DialogTextList.RemoveRange(0, 10);
-                    }
-
+                    lastDialogText = dialogText;
                     SystemFunctions.WriteData("DIALOG", "003D", dialogName, dialogText);
                 }
             }
@@ -184,10 +178,7 @@ namespace SharlayanReader
                             }
                         }
 
-                        if (ArrayFunctions.IsNotRepeated(logText, DialogTextList))
-                        {
-                            SystemFunctions.WriteData("CHAT_LOG", chatLogItem.Code, logName, logText);
-                        }
+                        SystemFunctions.WriteData("CHAT_LOG", chatLogItem.Code, logName, logText);
                     }
                 }
             }
@@ -210,11 +201,7 @@ namespace SharlayanReader
                 if (cutsceneText.Length > 0 && cutsceneText != lastCutsceneText)
                 {
                     lastCutsceneText = cutsceneText;
-
-                    if (ArrayFunctions.IsNotRepeated(cutsceneText, DialogTextList))
-                    {
-                        SystemFunctions.WriteData("CUTSCENE", "003D", "", cutsceneText);
-                    }
+                    SystemFunctions.WriteData("CUTSCENE", "003D", "", cutsceneText);
                 }
             }
             catch (Exception)
@@ -263,32 +250,6 @@ namespace SharlayanReader
 
     class ArrayFunctions
     {
-        private static readonly Regex InvalidSentence = new Regex(@"^[^.0-9a-zA-Z…０-９ａ-ｚＡ-Ｚぁ-ゖァ-ヺ一-龯]+$", RegexOptions.Compiled);
-        private static readonly Regex InvaildString = new Regex(@"[\r\n]|（.*?）|\(.*?\)", RegexOptions.Compiled);
-
-        public static bool IsNotRepeated(string text, List<string> dialogTextList)
-        {
-            for (int i = 0; i < dialogTextList.Count; i++)
-            {
-                string temp = text;
-                string dialogText = dialogTextList[i];
-
-                for (int j = 0; j < dialogText.Length; j++)
-                {
-                    temp = temp.Replace(dialogText[j].ToString(), string.Empty);
-                }
-
-                temp = InvaildString.Replace(temp, string.Empty);
-
-                if (InvalidSentence.IsMatch(temp.Trim()))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         public static bool IsSameChatLogEntries(List<ChatLogItem> chatLogEntries, List<ChatLogItem> lastChatLogEntries)
         {
             if (chatLogEntries.Count != lastChatLogEntries.Count)

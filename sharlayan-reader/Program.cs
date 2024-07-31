@@ -123,14 +123,8 @@ namespace SharlayanReader
                 string dialogName = StringFunctions.GetMemoryString(memoryHandler, "PANEL_NAME", 128);
                 string dialogText = StringFunctions.GetMemoryString(memoryHandler, "PANEL_TEXT", 512);
 
-                if (dialogText.Length > 0 && dialogText != lastDialogText)
+                if (dialogName.Length > 0 && dialogText.Length > 0 && dialogText != lastDialogText)
                 {
-                    if (dialogName.Length == 0)
-                    {
-                        SystemFunctions.TaskDelay();
-                        dialogName = StringFunctions.GetMemoryString(memoryHandler, "PANEL_NAME", 128);
-                    }
-
                     lastDialogText = dialogText;
                     SystemFunctions.WriteData("DIALOG", "003D", dialogName, dialogText);
                 }

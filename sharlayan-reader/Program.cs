@@ -339,7 +339,7 @@ namespace SharlayanReader
 
         private static readonly Regex SpecialPurposeUnicodeRegex = new Regex(@"[\uE000-\uF8FF]", RegexOptions.Compiled);
 
-        private static readonly Regex SpecialReplacementRegex = new Regex(@"[\uFFFD]", RegexOptions.Compiled);
+        //private static readonly Regex SpecialReplacementRegex = new Regex(@"[\uFFFD]", RegexOptions.Compiled);
 
         public static string ProcessFullLine(byte[] bytes)
         {
@@ -439,7 +439,7 @@ namespace SharlayanReader
                 // replace all Extended special purpose unicode with empty string
                 cleaned = SpecialPurposeUnicodeRegex.Replace(cleaned, string.Empty);
                 // cleanup special replacement character bytes: 239 191 189
-                cleaned = SpecialReplacementRegex.Replace(cleaned, string.Empty);
+                //cleaned = SpecialReplacementRegex.Replace(cleaned, string.Empty);
                 // remove new lines
                 cleaned = NewLineRegex.Replace(cleaned, string.Empty);
                 // remove characters 0-31

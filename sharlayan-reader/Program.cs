@@ -430,12 +430,6 @@ namespace SharlayanReader
                 }
 
                 var cleaned = Encoding.UTF8.GetString(newList.ToArray()).Replace("  ", " ");
-
-                if (cleaned.Contains("�"))
-                {
-                    return "";
-                }
-
                 newList.Clear();
 
                 // replace right arrow in chat (parsing)
@@ -457,6 +451,11 @@ namespace SharlayanReader
             {
                 //MemoryHandler.Instance.RaiseException(Logger, ex, true);
                 //Console.WriteLine(ex.Message);
+            }
+
+            if (line.Contains("�"))
+            {
+                return "";
             }
 
             return ProcessName(line);

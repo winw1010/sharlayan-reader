@@ -492,8 +492,8 @@ namespace SharlayanReader
                     }
                 }
 
-                //cleaned = Regex.Replace(cleaned, @"[\r\n]+", string.Empty);
-                cleaned = Regex.Replace(cleaned, @"[\x00-\x0C\x0E-\x1F\x7F]+", string.Empty);
+                cleaned = NewLineRegex.Replace(cleaned, string.Empty);
+                cleaned = NoPrintingCharactersRegex.Replace(cleaned, string.Empty);
                 line = cleaned;
             }
             catch (Exception)

@@ -24,7 +24,8 @@ namespace SharlayanReader
 
         static string lastDialogText = "";
         static List<ChatLogItem> lastChatLogEntries = new List<ChatLogItem>();
-        static string lastCutsceneText = "";
+        static string lastCutsceneText1 = "";
+        static string lastCutsceneText2 = "";
 
         static readonly List<string> systemCode = new List<string>() { "0039", "0839", "0003", "0038", "003C", "0048", "001D", "001C" };
 
@@ -89,7 +90,8 @@ namespace SharlayanReader
                 {
                     ReadDialog(memoryHandler);
                     ReadChatLog(memoryHandler);
-                    ReadCutscene(memoryHandler);
+                    ReadCutscene1(memoryHandler);
+                    ReadCutscene2(memoryHandler);
                 }
 
                 SystemFunctions.TaskDelay();
@@ -181,7 +183,7 @@ namespace SharlayanReader
             }
         }
 
-        static void ReadCutscene(MemoryHandler memoryHandler)
+        static void ReadCutscene1(MemoryHandler memoryHandler)
         {
             try
             {
@@ -190,12 +192,29 @@ namespace SharlayanReader
 
                 if (isCutscene == 1) return;
 
-                string cutsceneText = StringFunctions.GetMemoryString(memoryHandler, "CUTSCENE_TEXT", 256);
+                string cutsceneText1 = StringFunctions.GetMemoryString(memoryHandler, "CUTSCENE_TEXT", 256);
 
-                if (cutsceneText.Length > 0 && cutsceneText != lastCutsceneText)
+                if (cutsceneText1.Length > 0 && cutsceneText1 != lastCutsceneText1)
                 {
-                    lastCutsceneText = cutsceneText;
-                    SystemFunctions.WriteData("CUTSCENE", "003D", "", cutsceneText);
+                    lastCutsceneText1 = cutsceneText1;
+                    SystemFunctions.WriteData("CUTSCENE", "003D", "", cutsceneText1);
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        static void ReadCutscene2(MemoryHandler memoryHandler)
+        {
+            try
+            {
+                string cutsceneText2 = StringFunctions.GetMemoryString(memoryHandler, "CUTSCENE_TEXT_2", 256);
+
+                if (cutsceneText2.Length > 0 && cutsceneText2 != lastCutsceneText2)
+                {
+                    lastCutsceneText2 = cutsceneText2;
+                    SystemFunctions.WriteData("CUTSCENE2", "003D", "", cutsceneText2, 1000);
                 }
             }
             catch (Exception)
